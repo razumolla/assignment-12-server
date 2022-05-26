@@ -21,7 +21,13 @@ async function run() {
     console.log("DB Connected");
     const toolCollection = client.db("electronic_house").collection("tools");
 
-
+    // get all tools
+    app.get('/tools', async (req, res) => {
+      const query = {};
+      const cursor = toolCollection.find(query);
+      const tools = await cursor.toArray();
+      res.send(tools);
+    })
 
 
 
@@ -33,12 +39,11 @@ run().catch(console.dir);
 
 
 
+
+
+
 app.get('/house', (req, res) => {
   res.send('Hello From Electronic Tools House')
-})
-
-app.get('/', (req, res) => {
-  res.send('Hello World')
 })
 
 app.listen(port, () => {
