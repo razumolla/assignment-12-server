@@ -14,8 +14,12 @@ app.use(express.json());
 
 
 
-app.get('/home', (req, res) => {
+app.get('/house', (req, res) => {
   res.send('Hello From Electronic Tools House')
+})
+
+app.get('/', (req, res) => {
+  res.send('Hello World')
 })
 
 app.listen(port, () => {
