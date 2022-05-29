@@ -53,12 +53,22 @@ async function run() {
       const tool = await toolCollection.findOne(query);
       res.send(tool)
     })
+    // send data to server from add product
+    app.post("/tools", async (req, res) => {
+      const product = req.body;
+      const result = await toolCollection.insertOne(product);
+      res.send(result)
+    })
+
     // send data to server from order
     app.post("/order", async (req, res) => {
       const product = req.body;
       const result = await orderCollection.insertOne(product);
       res.send(result)
     })
+
+   
+
     // update user >order Quantity
     /*  app.put('/tools/:id', async (req, res) => {
        const quantity = req.params.quantity;
@@ -130,7 +140,7 @@ async function run() {
     })
 
 
-    
+
     // get all user and show All Users page
     app.get('/user', verifyJWT, async (req, res) => {
       const users = await userCollection.find().toArray();
