@@ -60,6 +60,16 @@ async function run() {
       const result = await toolCollection.insertOne(product);
       res.send(result)
     })
+    // delete tool from server from manage product
+    app.delete("/tools/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) }
+      const result = await toolCollection.deleteOne(query);
+      res.send(result);
+    })
+
+
+
 
 
     // send data to server from My review
@@ -77,20 +87,32 @@ async function run() {
       res.send(result);
     })
 
+
+
+
+
     // send data to server from order
     app.post("/order", async (req, res) => {
       const product = req.body;
       const result = await orderCollection.insertOne(product);
       res.send(result)
     })
-
-    // send data to server from order
+    // get data from server from order
     app.get("/order", async (req, res) => {
       const query = {};
       const cursor = orderCollection.find(query);
       const orders = await cursor.toArray();
       res.send(orders);
     })
+    // delete order from server from my-order page
+    app.delete("/order/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) }
+      const result = await orderCollection.deleteOne(query);
+      res.send(result);
+    })
+
+
 
     // update user >order Quantity
     /*  app.put('/tools/:id', async (req, res) => {
