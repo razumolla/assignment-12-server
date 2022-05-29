@@ -38,6 +38,7 @@ async function run() {
     const toolCollection = client.db("electronic_house").collection("tools");
     const orderCollection = client.db("electronic_house").collection("order");
     const userCollection = client.db("electronic_house").collection("users");
+    const reviewCollection = client.db("electronic_house").collection("reviews");
 
     // get all tools
     app.get('/tools', async (req, res) => {
@@ -58,6 +59,22 @@ async function run() {
       const product = req.body;
       const result = await toolCollection.insertOne(product);
       res.send(result)
+    })
+
+
+    // send data to server from My review
+    app.post("/reviews", async (req, res) => {
+      const product = req.body;
+      const result = await reviewCollection.insertOne(product);
+      res.send(result)
+    })
+
+    //load data to server from My review
+    app.get("/reviews", async (req, res) => {
+      const query = {};
+      const cursor = reviewCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
     })
 
     // send data to server from order
