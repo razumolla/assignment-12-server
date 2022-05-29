@@ -88,6 +88,7 @@ async function run() {
       }
     })
 
+
     // create user 
     app.put('/user/:email', async (req, res) => {
       const email = req.params.email;
@@ -101,6 +102,42 @@ async function run() {
       const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
       res.send({ result, token });
     })
+
+    // Admin panel 
+    app.put('/user/admin/:email', verifyJWT, async (req, res) => {
+      const email = req.params.email;
+      const requester = req.decoded.email;
+      const requesterAccount = await userCollection.findOne({ email: requester });
+      if (requesterAccount.role === 'admin') {
+        const filter = { email: email }
+        const updateDoc = {
+          $set: { role: 'admin' },
+        };
+        const result = userCollection.updateOne(filter, updateDoc);
+        res.send(result);
+      }
+      else {
+        res.status(403).send({ message: "Forbidden" })
+      }
+    })
+
+    // useAdmin er jonno :if you admin , you see all user
+    app.get('/admin/:email', async (req, res) => {
+      const email = req.params.email;
+      const user = await userCollection.findOne({ email: email })
+      const isAdmin = user.role === 'admin';
+      res.send({ admin: isAdmin })
+    })
+
+
+    
+    // get all user and show All Users page
+    app.get('/user', verifyJWT, async (req, res) => {
+      const users = await userCollection.find().toArray();
+      res.send(users)
+    })
+
+
 
 
   } finally {
