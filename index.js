@@ -67,7 +67,13 @@ async function run() {
       res.send(result)
     })
 
-   
+    // send data to server from order
+    app.get("/order", async (req, res) => {
+      const query = {};
+      const cursor = orderCollection.find(query);
+      const orders = await cursor.toArray();
+      res.send(orders);
+    })
 
     // update user >order Quantity
     /*  app.put('/tools/:id', async (req, res) => {
